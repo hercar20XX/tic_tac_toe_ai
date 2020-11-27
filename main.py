@@ -36,7 +36,7 @@ def switch_symbol(symbol):
         symbol = o
     return symbol
 
-
+# Example of commit
 def any_moves_remaining(game_board):
     pass
 
