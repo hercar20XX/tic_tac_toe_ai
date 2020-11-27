@@ -1,4 +1,4 @@
-from board import clean_board, print_board, x, o, set_move, is_valid_move
+from board import clean_board, print_board, x, o, set_move, is_valid_move, is_occupied_space
 from display import win_screen, lose_screen
 
 
@@ -7,6 +7,7 @@ def welcome():
     Welcome to AI Tic Tac Toe
     """
     print(msg)
+
 
 # example of another change
 def get_user_name():
@@ -36,9 +37,20 @@ def switch_symbol(symbol):
         symbol = o
     return symbol
 
-# Example of commit
+
+# We assume all moves are legal and in the correct order
+# No moves remaining when there are no spaces left
+# that are not x or o
 def any_moves_remaining(game_board):
-    pass
+    # go through the remaining spaces
+    # and if any aren't x or o
+    # return True
+    # otherwise return False
+    for row_id in game_board:
+        for col_i in [0, 1, 2]:
+            if not is_occupied_space(row_id, col_i, game_board):
+                return True
+    return False
 
 
 def win_check(game_board, symbol):
@@ -75,12 +87,16 @@ def game_loop(game_board, name):
         if is_valid_move(move, game_board):
             move_success = set_move(move, symbol, game_board)
             if move_success:
-                # TODO: No more moves left?
+                if not any_moves_remaining(game_board):
+                    print("TIE!! Make this pretty later!")
+                    # TODO: reset board, restart loop
+                    return None
                 if win_check(game_board, symbol):
                     if o is symbol:
                         win_screen(name)
                     else:
                         lose_screen(name)
+                    # TODO: reset board, restart loop
                     return None
                 else:
                     symbol = switch_symbol(symbol)
