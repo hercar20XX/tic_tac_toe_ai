@@ -19,6 +19,7 @@ def get_user_name():
 
 # first move
 def prompt_first_move(name, game_board):
+    print(f"{name} tell me your first move?")
     print_board(game_board)
     move = input("move or 'quit': ")
     if move == 'quit':
@@ -74,6 +75,12 @@ def win_check(game_board, symbol):
     return False
 
 
+def win_loop(name):
+    gameboard = clean_board()
+    prompt_first_move(name, gameboard)
+    game_loop(gameboard, name)
+
+
 # rest of the moves
 def game_loop(game_board, name):
     move = ''
@@ -88,16 +95,14 @@ def game_loop(game_board, name):
             move_success = set_move(move, symbol, game_board)
             if move_success:
                 if not any_moves_remaining(game_board):
-                    print("TIE!! Make this pretty later!")
-                    # TODO: reset board, restart loop
-                    return None
+                    print("TIE!!")
+                    win_loop(name)
                 if win_check(game_board, symbol):
                     if o is symbol:
                         win_screen(name)
                     else:
                         lose_screen(name)
-                    # TODO: reset board, restart loop
-                    return None
+                    win_loop(name)
                 else:
                     symbol = switch_symbol(symbol)
             else:
@@ -115,7 +120,6 @@ if __name__ == '__main__':
     board = clean_board()
     welcome()
     user_name = get_user_name()
-    print(f"{user_name} tell me your first move?")
     prompt_first_move(user_name, board)
     game_loop(board, user_name)
     good_bye(user_name)
